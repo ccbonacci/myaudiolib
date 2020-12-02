@@ -1,6 +1,6 @@
 package com.myaudiolib.web.Controller;
 
-import com.myaudiolib.web.model.Artiste;
+import com.myaudiolib.web.model.Artist;
 import com.myaudiolib.web.repository.ArtisteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,28 +9,37 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
-@RequestMapping(value = "/artistes")
-public class ArtisteController {
+@RequestMapping(value = "/artists")
+public class ArtistController {
 
     @Autowired
     private ArtisteRepository artisteRepository;
 
+
     // Show an artist
-    @RequestMapping(
+    @GetMapping(
             value = "/{id}",
-            method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
-    ) public Artiste getArtiste(@PathVariable(value = "id")Long id) {
-        Artiste artiste = artisteRepository.findArtisteById(id);
-        return artiste;
+    ) public Artist getArtiste(@PathVariable(value = "id")Long id) {
+        Optional<Artist> optionalArtiste = artisteRepository.findById(id); // L'artiste est encapsulé dans un optional
+        if (optionalArtiste.isEmpty()){
+            //erreur 404
+        }
+        return optionalArtiste.get();
     }
 
 
     // Show artists list by page
-
-    public Page<Artiste> listArtiste(
+    @GetMapping(
+            value="",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params =  {"page", "size", "sortProperty", "sortDirection"}
+    )
+    public Page<Artist> listArtiste(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "20") Integer size,
             @RequestParam(value = "sortProperty", defaultValue = "name")String sortProperty,
