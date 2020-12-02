@@ -9,13 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-
-
 public interface ArtisteRepository extends JpaRepository<Artiste, Long> {
 
     Artiste findByName(String name);
-
-    Artiste findArtisteByAlbumsContainsAndIgnoreCase(String title);
 
     Artiste findArtisteById(Long id);
 
@@ -25,7 +21,5 @@ public interface ArtisteRepository extends JpaRepository<Artiste, Long> {
 
     @Query("select a from Artiste a where lower(a.name) = lower(:Name)")
     List<Artiste> findByNameAllIgnoreCase(@Param("Name")String Name);
-
-
 
 }

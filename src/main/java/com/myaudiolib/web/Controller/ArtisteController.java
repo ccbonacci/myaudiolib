@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/artistes")
+@RequestMapping(value = "/artistes")
 public class ArtisteController {
 
     @Autowired
     private ArtisteRepository artisteRepository;
 
-    // Affiche un artiste
+    // Show an artist
     @RequestMapping(
             value = "/{id}",
             method = RequestMethod.GET,
@@ -26,6 +26,9 @@ public class ArtisteController {
         Artiste artiste = artisteRepository.findArtisteById(id);
         return artiste;
     }
+
+
+    // Show artists list by page
 
     public Page<Artiste> listArtiste(
             @RequestParam(value = "page", defaultValue = "0") Integer page,

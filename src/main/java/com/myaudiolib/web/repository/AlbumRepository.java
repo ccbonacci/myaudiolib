@@ -2,14 +2,15 @@ package com.myaudiolib.web.repository;
 
 import com.myaudiolib.web.model.Album;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 
-public interface AlbumRepository extends JpaRepository {
+public interface AlbumRepository extends JpaRepository<Album, Long> {
 
     Album findByTitle(String title);
 
@@ -19,12 +20,10 @@ public interface AlbumRepository extends JpaRepository {
 
     Page<Album> findAlbumById(Long id, Pageable pageable);
 
-    List<Album> findAlbumByArtistesContainsAndIgnoreCase(String Name);
+    List<Album> findAlbumByArtist(String Name);
 
     @Query("select al from Album al where lower(al.title) = lower(:TitleOrArtist) or lower(al.artist) = lower(:TitleOrArtist)")
     List<Album> findAlbumByTitleOrArtistIgnoreCase(@Param("TitleOrArtist")String TitleOrArtist);
-
-
 
 
 }
