@@ -1,7 +1,6 @@
 package com.myaudiolib.web.repository;
 
 import com.myaudiolib.web.model.Artiste;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,9 +17,11 @@ public interface ArtisteRepository extends JpaRepository<Artiste, Long> {
 
     Artiste findArtisteByAlbumsContainsAndIgnoreCase(String title);
 
-    List<Artiste> findArtisteById(Long id, Pageable pageable);
+    Artiste findArtisteById(Long id);
 
-    Page<Artiste> findArtisteByNameAndIdAndAlbums(String name, Long id, String title);
+    Page<Artiste> findArtisteById(Long id, Pageable pageable);
+
+    Page<Artiste> findArtisteByNameAndIdAndAlbums(String name, Long id, String title, Pageable pageable);
 
     @Query("select a from Artiste a where lower(a.name) = lower(:Name)")
     List<Artiste> findByNameAllIgnoreCase(@Param("Name")String Name);

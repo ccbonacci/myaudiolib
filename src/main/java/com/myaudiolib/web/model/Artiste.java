@@ -1,31 +1,37 @@
 package com.myaudiolib.web.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 
 @Entity
+@Table(name = "artist")
 public class Artiste {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ArtistId")
     private Long id;
 
+    @Column(name = "Name")
     private String name;
 
-    private String albums;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "artist", fetch =  FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Album> albums;
 
     public Artiste() {
     }
 
-    public Artiste(Long id, String name, String albums) {
+    public Artiste(Long id, String name, List<Album> albums) {
         this.id = id;
         this.name = name;
         this.albums = albums;
-
     }
 
     public Long getId() {
@@ -44,11 +50,11 @@ public class Artiste {
         this.name = name;
     }
 
-    public String getAlbums() {
+    public List<Album> getAlbums() {
         return albums;
     }
 
-    public void setAlbums(String albums) {
+    public void setAlbums(List<Album> albums) {
         this.albums = albums;
     }
 
