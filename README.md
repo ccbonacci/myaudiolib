@@ -19,6 +19,7 @@ Ajouter les classes nécessaires (avec les URLs standards) afin de créer un ser
 - Création d'un artiste (gestion de l'erreur 409 s'il existe déjà un artiste de même nom)
 - Modification d'un artiste (Méthode PUT avec gestion des 404)
 - Suppression d'un artiste (gérer les 404 et le bon code HTTP de retour, gérer de manière cohérente le cascading...)
+
 - Ajout d'un album à un artiste (gérer les 404 et les 409 en cas d'album déjà existant).
 - Suppression d'un album (gérer les 404)
 

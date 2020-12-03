@@ -1,11 +1,7 @@
 package com.myaudiolib.web.model;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 
 @Entity
@@ -21,23 +17,17 @@ public class Artist {
 
     @JsonIgnoreProperties("artist")
     @OneToMany(mappedBy = "artistId", fetch =  FetchType.EAGER , cascade = CascadeType.REMOVE)
-    private List<Album> albums;
+    private List<Album> album;
 
+    public Long getId() {return id;}
 
-    public Long getId() {
-        return id;
-    }
+    public void setId(Long id) {this.id = id;}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() {return name;}
 
-    public String getName() {
-        return name;
-    }
+    public void setName(String name) {this.name = name;}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public List<Album> getAlbum() {return album;}
 
+    public void setAlbum(List<Album> album) {this.album = album;}
 }

@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 
@@ -28,8 +31,24 @@ public class ArtistController {
         Optional<Artist> optionalArtiste = artisteRepository.findById(id); // L'artiste est encapsulé dans un optional
         if (optionalArtiste.isEmpty()){
             //erreur 404
+            throw new EntityNotFoundException("L'artiste " + optionalArtiste.get() + " recherché n'éxiste pas dans la base de données");
         }
         return optionalArtiste.get();
+    }
+
+
+    // Search Artist
+    @RequestMapping(
+            value = "",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Artist searchByName(@RequestParam("name") String name)
+    {
+        Artist artist = artisteRepository.findByName(name);
+        if (artist == null){
+            throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé");
+        }
+        return artist;
     }
 
 
@@ -50,6 +69,53 @@ public class ArtistController {
                 size,
                 Sort.Direction.fromString(sortDirection),
                 sortProperty));
+    }
+
+
+    // Create an artist
+    @PostMapping(
+            value = "",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(value = HttpStatus.CREATED) // 201
+    public Artist createArtist(@RequestBody Artist artist){
+        if (artisteRepository.findByName(artist.getName()) != null){
+            // 409
+            throw new EntityExistsException("Il y existe déjà un artiste nommé " + artist.getName() + " dans la base de données");
+        }
+        return artisteRepository.save(artist);
+    }
+
+
+    // Update an artist
+    @PutMapping(
+            value = "/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public Artist updateArtist(
+            @PathVariable Long id,
+            @RequestBody Artist artist)
+    {
+        if (!artisteRepository.existsById(id)){
+            throw new EntityNotFoundException("L'artiste " + id + " n'a pas été trouvé.");
+        }
+        return artisteRepository.save(artist);
+    }
+
+
+    // Delete an artist
+    @DeleteMapping(
+            value = "/{id}"
+    )
+    @ResponseStatus(value = HttpStatus.NO_CONTENT) // 204
+    public void deleteArtist(@PathVariable(value = "id")Long id){
+        // 404
+        if( ! artisteRepository.existsById(id)){
+            throw new EntityNotFoundException("L'artiste " + id + " n'existe pas.");
+        }
+        artisteRepository.deleteById(id);
     }
 
 }
