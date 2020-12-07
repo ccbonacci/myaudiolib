@@ -11,11 +11,14 @@ import java.util.Optional;
 
 public class AlbumController {
 
+
     @Autowired
     private AlbumRepository albumRepository;
 
+
     @Autowired
     private ArtisteRepository artisteRepository;
+
 
     // Show an album
     @GetMapping(
@@ -51,9 +54,7 @@ public class AlbumController {
         // Setter l'album à l'artiste et sauvegarder
         album1.setArtistId(artist);
         albumRepository.save(album1);
-
     }
-
 
     // Delete an album
 

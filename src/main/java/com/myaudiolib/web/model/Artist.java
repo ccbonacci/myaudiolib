@@ -13,11 +13,12 @@ public class Artist {
     @Column(name = "ArtistId")
     private Long id;
 
+    @Column(name = "Name")
     private String name;
 
-    @JsonIgnoreProperties("artist")
-    @OneToMany(mappedBy = "artistId", fetch =  FetchType.EAGER , cascade = CascadeType.REMOVE)
-    private List<Album> album;
+    @JsonIgnoreProperties("artistId")
+    @OneToMany(mappedBy = "artist", fetch =  FetchType.EAGER , cascade = CascadeType.REMOVE)
+    private List<Album> albums;
 
     public Long getId() {return id;}
 
@@ -27,7 +28,7 @@ public class Artist {
 
     public void setName(String name) {this.name = name;}
 
-    public List<Album> getAlbum() {return album;}
+    public List<Album> getAlbums() {return albums;}
 
-    public void setAlbum(List<Album> album) {this.album = album;}
+    public void setAlbums(List<Album> album) {this.albums = albums;}
 }

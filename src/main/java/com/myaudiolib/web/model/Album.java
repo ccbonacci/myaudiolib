@@ -1,4 +1,5 @@
 package com.myaudiolib.web.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -12,12 +13,13 @@ public class Album {
     @Column(name = "AlbumId")
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "Title")
     private String title;
+
 
     @ManyToOne
     @JoinColumn(name = "ArtistId")
-    private Artist artistId;
+    private Artist artist;
 
 
     public Long getId() {
@@ -37,11 +39,11 @@ public class Album {
     }
 
     public Artist getArtistId() {
-        return artistId;
+        return artist;
     }
 
-    public void setArtistId(Artist artistId) {
-        this.artistId = artistId;
+    public void setArtistId(Artist artist) {
+        this.artist = artist;
     }
 
 }

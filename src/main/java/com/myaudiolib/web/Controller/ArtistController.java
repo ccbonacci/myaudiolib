@@ -28,21 +28,23 @@ public class ArtistController {
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     ) public Artist getArtiste(@PathVariable(value = "id")Long id) {
-        Optional<Artist> optionalArtiste = artisteRepository.findById(id); // L'artiste est encapsulé dans un optional
+        Optional<Artist> optionalArtiste = artisteRepository.findById(id); // L'artiste est encapsulé dans un optional non null
+        System.out.println(id);
         if (optionalArtiste.isEmpty()){
             //erreur 404
-            throw new EntityNotFoundException("L'artiste " + optionalArtiste.get() + " recherché n'éxiste pas dans la base de données");
+
+            throw new EntityNotFoundException("L'artiste " + id + " recherché n'éxiste pas dans la base de données");
         }
         return optionalArtiste.get();
     }
 
 
     // Search Artist
-    @RequestMapping(
+    @GetMapping(
             value = "",
-            method = RequestMethod.GET,
+            params = {"name"},
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Artist searchByName(@RequestParam("name") String name)
+    public Artist searchByName(@RequestParam String name)
     {
         Artist artist = artisteRepository.findByName(name);
         if (artist == null){
@@ -98,8 +100,9 @@ public class ArtistController {
             @PathVariable Long id,
             @RequestBody Artist artist)
     {
+        // 404
         if (!artisteRepository.existsById(id)){
-            throw new EntityNotFoundException("L'artiste " + id + " n'a pas été trouvé.");
+            throw new EntityNotFoundException("L'artiste dont l'identifiant " + id + " n'a pas été trouvé.");
         }
         return artisteRepository.save(artist);
     }
