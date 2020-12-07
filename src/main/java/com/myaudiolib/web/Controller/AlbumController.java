@@ -45,7 +45,7 @@ public class AlbumController {
         Optional<Album> optionalAlbum = albumRepository.findById(id);
         Album album1 = optionalAlbum.get();
 
-        // Gestion des erreurs
+        // Errors handlering
 
         // Récupérer l'artiste à partir de son id
         Optional<Artist> optionalArtist = artisteRepository.findById(id);

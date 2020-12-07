@@ -1,5 +1,6 @@
 package com.myaudiolib.web.exception;
 
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,11 +19,22 @@ public class GlobalExceptionHandler {
         return e.getMessage();
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleIllegalArgumentException(IllegalArgumentException e){
+        return e.getMessage();
+    }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e ){
-        return "Le paramètre " + e.getName() + " est incorrecte : " + e.getValue();
+        return "La valeur du paramètre " + e.getName() + " est incorrecte : " + e.getValue();
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handlePropertyReferenceException(PropertyReferenceException e){
+        return "La propriété " + e.getPropertyName() + " n'existe pas !";
     }
 
 }

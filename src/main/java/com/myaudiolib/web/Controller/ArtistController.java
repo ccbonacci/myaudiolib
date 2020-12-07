@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -66,6 +67,14 @@ public class ArtistController {
             @RequestParam(value = "sortProperty", defaultValue = "name")String sortProperty,
             @RequestParam(value = "sortDirection", defaultValue = "ACS") String sortDirection
             ){
+
+        if (page < 0) {
+            // 400
+            throw new IllegalArgumentException("Le paramètre page doit être positif ou égal à zéro!");
+        }
+        if(!"ASC".equalsIgnoreCase(sortDirection) && !"DESC".equalsIgnoreCase(sortDirection)){
+            throw new IllegalArgumentException("Le paramètre sortDirection doit valoir ASC ou DESC");
+        }
         return artisteRepository.findAll(PageRequest.of(
                 page,
                 size,
@@ -113,12 +122,13 @@ public class ArtistController {
             value = "/{id}"
     )
     @ResponseStatus(value = HttpStatus.NO_CONTENT) // 204
-    public void deleteArtist(@PathVariable(value = "id")Long id){
+    public RedirectView deleteArtist(@PathVariable(value = "id")Long id){
         // 404
         if( ! artisteRepository.existsById(id)){
-            throw new EntityNotFoundException("L'artiste " + id + " n'existe pas.");
+            throw new EntityNotFoundException("L'artiste " + id + " n'a pas été trouvé.");
         }
         artisteRepository.deleteById(id);
+        return new RedirectView("/artits?page=0&size=10&sortProperty=name&sortDirection=ASC");
     }
 
 }
