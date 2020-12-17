@@ -13,6 +13,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.awt.*;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,37 +25,55 @@ public class ArtistController {
     @Autowired
     private ArtisteRepository artisteRepository;
 
-
     // Show an artist
     @GetMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     ) public Artist getArtiste(@PathVariable(value = "id")Long id) {
         Optional<Artist> optionalArtiste = artisteRepository.findById(id); // L'artiste est encapsulé dans un optional non null
-        System.out.println(id);
         if (optionalArtiste.isEmpty()){
             //erreur 404
-
             throw new EntityNotFoundException("L'artiste " + id + " recherché n'éxiste pas dans la base de données");
+            // return List vide "" ;
         }
         return optionalArtiste.get();
     }
 
-
     // Search Artist
+//    @GetMapping(
+//            value = "",
+//            produces = MediaType.APPLICATION_JSON_VALUE,
+//            params = {"name"})
+//    public List<Artist> searchArtist(
+//                @RequestParam(value = "name")String name)
+//    {
+//        List<Artist> artist = artisteRepository.findByNameContainingIgnoreCase(name);
+//        if (artist == null){
+//            throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé");
+//        }
+//        return artist;
+//    }
+     // second method Search Artist
     @GetMapping(
             value = "",
-            params = {"name"},
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Artist searchByName(@RequestParam String name)
-    {
-        Artist artist = artisteRepository.findByName(name);
-        if (artist == null){
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            params = {"name", "page", "size", "sortProperty", "sortDirection"})
+    public Page<Artist> searchArtist(
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "20") Integer size,
+            @RequestParam(value = "sortProperty") String sortProperty,
+            @RequestParam(value = "sortDirection", defaultValue = "ACS") String sortDirection
+    ){
+        if (artisteRepository.findByNameContainingIgnoreCase(name) == null){
             throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé");
         }
-        return artist;
+        return artisteRepository.findByNameContainingIgnoreCase(name,PageRequest.of(
+                page,
+                size,
+                Sort.Direction.fromString(sortDirection),
+                sortProperty));
     }
-
 
     // Show artists list by page
     @GetMapping(
@@ -82,7 +102,6 @@ public class ArtistController {
                 sortProperty));
     }
 
-
     // Create an artist
     @PostMapping(
             value = "",
@@ -98,13 +117,13 @@ public class ArtistController {
         return artisteRepository.save(artist);
     }
 
-
     // Update an artist
     @PutMapping(
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @ResponseStatus(value = HttpStatus.CREATED) // 201
     public Artist updateArtist(
             @PathVariable Long id,
             @RequestBody Artist artist)
@@ -115,7 +134,6 @@ public class ArtistController {
         }
         return artisteRepository.save(artist);
     }
-
 
     // Delete an artist
     @DeleteMapping(
@@ -128,7 +146,7 @@ public class ArtistController {
             throw new EntityNotFoundException("L'artiste " + id + " n'a pas été trouvé.");
         }
         artisteRepository.deleteById(id);
-        return new RedirectView("/artits?page=0&size=10&sortProperty=name&sortDirection=ASC");
+        return new RedirectView("/artits?page=0&size=10&sortProperty=name&sortDirection=DESC");
     }
 
 }
