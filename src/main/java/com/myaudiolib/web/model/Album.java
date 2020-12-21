@@ -1,5 +1,4 @@
 package com.myaudiolib.web.model;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
@@ -43,10 +42,5 @@ public class Album {
     public void setArtist(Artist artist) {
         this.artist = artist;
     }
-//    public long getArtistId() {
-//        return artist.getId();
-//    }
-//    public void setArtistId(Long id) {
-//        this.artist.setId(id);
-//    }
+
 }

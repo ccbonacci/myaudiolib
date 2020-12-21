@@ -24,6 +24,7 @@ public class ArtistController {
     @Autowired
     private ArtisteRepository artisteRepository;
 
+
     // Show an artist
     @GetMapping(
             value = "/{id}",
@@ -61,6 +62,7 @@ public class ArtistController {
             throw new IllegalArgumentException("Le numéro de la page doit être positif ou égal à zéro!");
         }
         if(!"ASC".equalsIgnoreCase(sortDirection) && !"DESC".equalsIgnoreCase(sortDirection)){
+            //400
             throw new IllegalArgumentException("Le paramètre sortDirection doit valoir ASC ou DESC");
         }
 
@@ -82,8 +84,8 @@ public class ArtistController {
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "20") Integer size,
             @RequestParam(value = "sortProperty", defaultValue = "name")String sortProperty,
-            @RequestParam(value = "sortDirection", defaultValue = "ACS") String sortDirection
-            ){
+            @RequestParam(value = "sortDirection", defaultValue = "ASC") String sortDirection
+        ){
 
         if (page < 0) {
             // 400
@@ -94,11 +96,12 @@ public class ArtistController {
         }
 
         return artisteRepository.findAll(PageRequest.of(
-                page,
-                size,
-                Sort.Direction.fromString(sortDirection),
-                sortProperty));
+            page,
+            size,
+            Sort.Direction.fromString(sortDirection),
+            sortProperty));
     }
+
 
     // Create an artist
     @PostMapping(
@@ -107,13 +110,15 @@ public class ArtistController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(value = HttpStatus.CREATED) // 201
-    public Artist createArtist(@RequestBody Artist artist){
+    public Artist createArtist(
+            @RequestBody Artist artist){
         if (artisteRepository.findByName(artist.getName()) != null){
             // 409
             throw new EntityExistsException("Il y existe déjà un artiste nommé " + artist.getName() + " dans la base de données");
         }
         return artisteRepository.save(artist);
     }
+
 
     // Update an artist
     @PutMapping(
@@ -132,6 +137,7 @@ public class ArtistController {
         }
         return artisteRepository.save(artist);
     }
+
 
     // Delete an artist
     @DeleteMapping(

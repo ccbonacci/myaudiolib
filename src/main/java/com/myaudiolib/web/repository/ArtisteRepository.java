@@ -12,7 +12,6 @@ public interface ArtisteRepository extends JpaRepository<Artist, Long> {
 
     Artist findByName(String name);
 
-    // Afficher la recherche d'une liste d'artistes avec une partie du nom;
     List<Artist> findByNameContainingIgnoreCase(String name);
     Page<Artist> findByNameContainingIgnoreCase(String name, Pageable pageable);
 

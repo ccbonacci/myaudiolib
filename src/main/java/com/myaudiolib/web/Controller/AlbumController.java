@@ -1,8 +1,6 @@
 package com.myaudiolib.web.Controller;
 import com.myaudiolib.web.model.Album;
 import com.myaudiolib.web.repository.AlbumRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityExistsException;
-import java.util.Set;
 
 
 @RestController
@@ -19,21 +16,6 @@ public class AlbumController {
 
     @Autowired
     private AlbumRepository albumRepository;
-
-//    @Autowired
-//    private ArtisteRepository artisteRepository;
-    // Show an album
-//    @GetMapping(
-//            value = "/{id}",
-//            produces = MediaType.APPLICATION_JSON_VALUE
-//    ) public Album getAlbum(@PathVariable(value = "id")Long id) {
-//        // Encapsulation de l'album dans un optional
-//        Optional<Album> optionalAlbum = albumRepository.findById(id);
-//        if (optionalAlbum.isEmpty()){
-//            //erreur 404
-//        }
-//        return optionalAlbum.get();
-//    }
 
     // Add an album to an artist
     @PostMapping(
