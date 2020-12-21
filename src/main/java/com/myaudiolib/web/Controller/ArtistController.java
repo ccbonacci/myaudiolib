@@ -50,7 +50,7 @@ public class ArtistController {
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "20") Integer size,
             @RequestParam(value = "sortProperty") String sortProperty,
-            @RequestParam(value = "sortDirection", defaultValue = "ACS") String sortDirection)
+            @RequestParam(value = "sortDirection", defaultValue = "ASC") String sortDirection)
     {
         if (artisteRepository.findByNameContainingIgnoreCase(name).isEmpty()){
             // 404
