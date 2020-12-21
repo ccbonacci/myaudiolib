@@ -28,31 +28,19 @@ public class ArtistController {
     @GetMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
-    ) public Artist getArtiste(@PathVariable(value = "id")Long id) {
+    ) public Artist getArtiste(
+            @PathVariable(value = "id")Long id)
+    {
         Optional<Artist> optionalArtiste = artisteRepository.findById(id); // L'artiste est encapsulé dans un optional non null
         if (optionalArtiste.isEmpty()){
             //erreur 404
-            throw new EntityNotFoundException("L'artiste " + id + " recherché n'éxiste pas dans la base de données");
-            // return List vide "" ;
+            throw new EntityNotFoundException("L'artiste " + id + " recherché n'existe pas dans la base de données");
         }
         return optionalArtiste.get();
     }
 
-    // Search Artist
-//    @GetMapping(
-//            value = "",
-//            produces = MediaType.APPLICATION_JSON_VALUE,
-//            params = {"name"})
-//    public List<Artist> searchArtist(
-//                @RequestParam(value = "name")String name)
-//    {
-//        List<Artist> artist = artisteRepository.findByNameContainingIgnoreCase(name);
-//        if (artist == null){
-//            throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé");
-//        }
-//        return artist;
-//    }
-     // second method Search Artist
+
+    // Find an artiste or an list of artists
     @GetMapping(
             value = "",
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -62,11 +50,18 @@ public class ArtistController {
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "20") Integer size,
             @RequestParam(value = "sortProperty") String sortProperty,
-            @RequestParam(value = "sortDirection", defaultValue = "ACS") String sortDirection
-    ){
-        if (artisteRepository.findByNameContainingIgnoreCase(name) == null){
+            @RequestParam(value = "sortDirection", defaultValue = "ACS") String sortDirection)
+    {
+        if (artisteRepository.findByNameContainingIgnoreCase(name).isEmpty()){
             // 404
-            throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé");
+            throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé !");
+        }
+        if (page < 0) {
+            // 400
+            throw new IllegalArgumentException("Le numéro de la page doit être positif ou égal à zéro!");
+        }
+        if(!"ASC".equalsIgnoreCase(sortDirection) && !"DESC".equalsIgnoreCase(sortDirection)){
+            throw new IllegalArgumentException("Le paramètre sortDirection doit valoir ASC ou DESC");
         }
 
         return artisteRepository.findByNameContainingIgnoreCase(name,PageRequest.of(
@@ -75,6 +70,7 @@ public class ArtistController {
                 Sort.Direction.fromString(sortDirection),
                 sortProperty));
     }
+
 
     // Show artists list by page
     @GetMapping(
@@ -144,7 +140,7 @@ public class ArtistController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT) // 204
     public RedirectView deleteArtist(@PathVariable(value = "id")Long id){
         // 404
-        if( ! artisteRepository.existsById(id)){
+        if(!artisteRepository.existsById(id)){
             throw new EntityNotFoundException("L'artiste " + id + " n'a pas été trouvé.");
         }
         artisteRepository.deleteById(id);

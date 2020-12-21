@@ -45,11 +45,11 @@ public class AlbumController {
     public Album addAlbum(
             @RequestBody Album album){
 
-
         if (albumRepository.findByTitle(album.getTitle()) != null){
             // 409
             throw new EntityExistsException("L'album " + album.getTitle() + " existe pour cet artiste.");
         }
+
         // Sauvegarder l'album
         return albumRepository.save(album);
     }
