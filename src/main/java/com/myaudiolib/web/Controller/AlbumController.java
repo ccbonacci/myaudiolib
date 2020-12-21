@@ -63,6 +63,10 @@ public class AlbumController {
     public RedirectView deleteAlbum(
             @PathVariable(value = "id")Long id
     ){
+        //404
+        if(!albumRepository.existsById(id)){
+            throw new EntityExistsException("L'album " + id + " n'a pas été trouvé !");
+        }
         albumRepository.deleteById(id);
         return new RedirectView("/artist?page=0&size=10&sortProperty=name&sortDirection=DESC");
     }
