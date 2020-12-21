@@ -1,7 +1,11 @@
 package com.myaudiolib.web.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -16,9 +20,9 @@ public class Artist {
     @Column(name = "Name")
     private String name;
 
-    @JsonIgnoreProperties("artistId")
+    @JsonIgnoreProperties("artist")
     @OneToMany(mappedBy = "artist", fetch =  FetchType.EAGER , cascade = CascadeType.REMOVE)
-    private List<Album> albums;
+    private Set<Album> albums = new HashSet<>();
 
     public Long getId() {return id;}
 
@@ -28,7 +32,7 @@ public class Artist {
 
     public void setName(String name) {this.name = name;}
 
-    public List<Album> getAlbums() {return albums;}
+    public Set<Album> getAlbums() {return albums;}
 
-    public void setAlbums(List<Album> album) {this.albums = albums;}
+    public void setAlbums(Set<Album> albums) {this.albums = albums;}
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Album")
+@Table(name = "album")
 public class Album {
 
     @Id
@@ -16,10 +16,9 @@ public class Album {
     private String title;
 
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "ArtistId")
     private Artist artist;
-
 
     public Long getId() {
         return id;
@@ -37,12 +36,17 @@ public class Album {
         this.title = title;
     }
 
-    public Artist getArtistId() {
+    public Artist getArtist() {
         return artist;
     }
 
-    public void setArtistId(Artist artist) {
+    public void setArtist(Artist artist) {
         this.artist = artist;
     }
-
+//    public long getArtistId() {
+//        return artist.getId();
+//    }
+//    public void setArtistId(Long id) {
+//        this.artist.setId(id);
+//    }
 }

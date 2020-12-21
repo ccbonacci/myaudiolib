@@ -13,8 +13,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import java.awt.*;
-import java.util.List;
+
 import java.util.Optional;
 
 
@@ -66,8 +65,10 @@ public class ArtistController {
             @RequestParam(value = "sortDirection", defaultValue = "ACS") String sortDirection
     ){
         if (artisteRepository.findByNameContainingIgnoreCase(name) == null){
+            // 404
             throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé");
         }
+
         return artisteRepository.findByNameContainingIgnoreCase(name,PageRequest.of(
                 page,
                 size,
@@ -90,11 +91,12 @@ public class ArtistController {
 
         if (page < 0) {
             // 400
-            throw new IllegalArgumentException("Le paramètre page doit être positif ou égal à zéro!");
+            throw new IllegalArgumentException("Le numéro de la page doit être positif ou égal à zéro!");
         }
         if(!"ASC".equalsIgnoreCase(sortDirection) && !"DESC".equalsIgnoreCase(sortDirection)){
             throw new IllegalArgumentException("Le paramètre sortDirection doit valoir ASC ou DESC");
         }
+
         return artisteRepository.findAll(PageRequest.of(
                 page,
                 size,
