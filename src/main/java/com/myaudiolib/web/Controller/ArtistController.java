@@ -53,7 +53,7 @@ public class ArtistController {
             @RequestParam(value = "sortProperty") String sortProperty,
             @RequestParam(value = "sortDirection", defaultValue = "ASC") String sortDirection)
     {
-        if (artisteRepository.findByNameContainingIgnoreCase(name).isEmpty()){
+        if (artisteRepository.findByNameContainingIgnoreCase(name) == null){
             // 404
             throw new EntityNotFoundException("L'artiste nommé " + name + " n'a pas été trouvé !");
         }

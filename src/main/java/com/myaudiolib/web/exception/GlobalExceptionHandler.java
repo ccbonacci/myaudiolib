@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -34,7 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handlerMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e ){
+    public String handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e ){
         return "La valeur du paramètre " + e.getName() + " est incorrecte : " + e.getValue();
     }
 
