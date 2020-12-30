@@ -12,7 +12,7 @@ public class Album {
     private Long id;
 
     @Column(name = "Title")
-    private Long title;
+    private String title;
 
     @ManyToOne()
     @JoinColumn(name = "ArtistId")
@@ -29,11 +29,11 @@ public class Album {
         this.id = id;
     }
 
-    public Long getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(Long title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
