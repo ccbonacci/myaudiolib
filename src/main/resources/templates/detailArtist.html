@@ -23,7 +23,9 @@
 								<div class="col-lg-2 text-center">
 									<div class="list-group text-center" th:each="album : ${artist.albums}">
 										<button class="btn-danger list-group-item list-group-item-action" >
-											<span class="glyphicon glyphicon-remove"></span>
+											<a th:href="'/artists/' + ${album.id} + '/delete'" class="btn btn-danger">
+												<span class="glyphicon glyphicon-remove"></span>
+											</a>
 										</button>
 									</div>
 								</div>

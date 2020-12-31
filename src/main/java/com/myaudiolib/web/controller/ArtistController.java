@@ -97,25 +97,27 @@ public class ArtistController {
 
 
     // Créer un artiste
-    //  Affiche une page détail vide
 
-//    @GetMapping(value = "")
+    //  Affiche une page détail vide
+//    @GetMapping(value = "/new/")
 //    public String newArtist(
 //            @PathVariable Artist artist,
 //            final ModelMap model){
 //        model.put("artist", new Artist());
 //        return "detailArtist";
 //    }
-//    // Sauvegarder un artiste
-//    @PostMapping(
-//            value= "",
-//            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-//    public String createEmploye(
-//            @RequestBody Artist artist,
-//            final ModelMap model){
-//        model.put("artist", artistRepository.save(artist));
-//        return "detailArtist";
-//    }
+    // Sauvegarder un artiste
+@PostMapping(
+        value = "",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+public String createArtist(
+        @RequestBody Artist artist,
+        final ModelMap model)
+{
+    model.put("artist", artistRepository.save(artist));
+    return "detailArtist";
+}
+
 
 
     // Supprimer un artiste
