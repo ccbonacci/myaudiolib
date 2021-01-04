@@ -72,4 +72,6 @@ public class Album {
     public int hashCode() {
         return Objects.hash(id, title, artist);
     }
+
+
 }

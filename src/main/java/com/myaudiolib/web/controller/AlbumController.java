@@ -27,9 +27,6 @@ public class AlbumController {
     @Autowired
     private AlbumRepository albumRepository;
 
-    @Autowired
-    private ArtistRepository artistRepository;
-
     // Ajouter un album à un artist
     @PostMapping(value = "",
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
@@ -39,7 +36,7 @@ public class AlbumController {
             final ModelMap model) {
 
         // gestion de l'erreur 409
-        if (albumRepository.findByTitle(album.getTitle()) != null){
+        if (albumRepository.findByTitleAndArtistId(album.getTitle(), album.getArtist()) != null){
             // 409
             throw new EntityNotFoundException("L'album " + album.getTitle() + " existe pour cet artiste.");
         }
@@ -53,9 +50,9 @@ public class AlbumController {
     public RedirectView deleteAlbum(
             @PathVariable(value= "id") Long id)
     {
-        Artist artist = artistRepository.getOne(id);
+
         albumRepository.deleteById(id);
-        return new RedirectView("/artists/" +  artist);
+        return new RedirectView("/artists/" );
     }
 
 
