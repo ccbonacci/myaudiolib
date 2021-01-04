@@ -50,7 +50,7 @@ public class AlbumController {
             throw new EntityExistsException("L'album " + id + " n'a pas été trouvé !");
         }
         albumRepository.deleteById(id);
-        return new RedirectView("/artist?page=0&size=10&sortProperty=name&sortDirection=DESC");
+        // return new RedirectView("/artist?page=0&size=10&sortProperty=name&sortDirection=DESC"); // les redirectView ne sont pas nécessaires dans les RestController
     }
 
 }

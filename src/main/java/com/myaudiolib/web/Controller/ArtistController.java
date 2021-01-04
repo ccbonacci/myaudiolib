@@ -150,7 +150,7 @@ public class ArtistController {
             throw new EntityNotFoundException("L'artiste " + id + " n'a pas été trouvé.");
         }
         artisteRepository.deleteById(id);
-        return new RedirectView("/artits?page=0&size=10&sortProperty=name&sortDirection=DESC");
+        //return new RedirectView("/artits?page=0&size=10&sortProperty=name&sortDirection=DESC"); // les redirectView ne sont pas nécessaires dans les RestController
     }
 
 }
