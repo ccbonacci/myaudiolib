@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -45,5 +46,29 @@ public class Artist {
 
     public void setAlbums(Set<Album> albums) {
         this.albums = albums;
+    }
+
+    @Override
+    public String toString() {
+        return "Artist{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", albums=" + albums +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Artist artist = (Artist) o;
+        return Objects.equals(id, artist.id) &&
+                Objects.equals(name, artist.name) &&
+                Objects.equals(albums, artist.albums);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, albums);
     }
 }

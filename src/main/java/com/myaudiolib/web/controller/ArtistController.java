@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -39,41 +40,23 @@ public class ArtistController {
     }
 
 
-    // Récupérer un artiste par son nom
+    // Récupérer un artiste par nom
     @GetMapping(value = "",
-            produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            params = {"name", "page", "size", "sortProperty", "sortDirection"})
+            params = {"name"})
     public String searchArtistByName(
             @RequestParam(value = "name") String name,
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "20") Integer size,
-            @RequestParam(value = "sortProperty") String sortProperty,
-            @RequestParam(value = "sortDirection", defaultValue = "ASC") String sortDirection,
             final ModelMap model){
-        System.out.println(name);
-        Page<Artist> pageArtist = artistRepository.findAllByNameContaining(name, PageRequest.of(
-                page,
-                size,
-                Sort.Direction.fromString(sortDirection),
-                sortProperty));
-        System.out.println(pageArtist);
+        List<Artist> artistList = artistRepository.findAllByNameContaining(name);
         // gestion de l'erreur 404
-        if (pageArtist != null){
+        if (artistList == null) {
             throw new EntityNotFoundException("L'artiste " + name + " recherché n'a pas été trouvé.");
         }
-        model.put("artist", pageArtist);
-        model.put("pageNumber", page + 1);
-        model.put("previousPage", page - 1);
-        model.put("nextPage", page + 1);
-        model.put("start", page * size + 1);
-        model.put("end", (page) * size + pageArtist.getNumberOfElements());
-
+        model.put("artists", artistList);
         return "listeArtists";
     }
 
 
     // Afficher la liste des artistes
-
     @GetMapping(value = "",
             produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String listArtist(
@@ -108,7 +91,7 @@ public class ArtistController {
 //    }
     // Sauvegarder un artiste
 @PostMapping(
-        value = "",
+        value = "/addArtist/",
         consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
 public String createArtist(
         @RequestBody Artist artist,
