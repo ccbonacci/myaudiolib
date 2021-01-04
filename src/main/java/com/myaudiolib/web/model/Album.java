@@ -1,5 +1,4 @@
 package com.myaudiolib.web.model;
-
 import javax.persistence.*;
 import java.util.Objects;
 
