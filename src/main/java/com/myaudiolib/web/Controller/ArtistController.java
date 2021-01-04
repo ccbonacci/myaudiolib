@@ -144,7 +144,7 @@ public class ArtistController {
             value = "/{id}"
     )
     @ResponseStatus(value = HttpStatus.NO_CONTENT) // 204
-    public RedirectView deleteArtist(@PathVariable(value = "id")Long id){
+    public void deleteArtist(@PathVariable(value = "id")Long id){
         // 404
         if(!artisteRepository.existsById(id)){
             throw new EntityNotFoundException("L'artiste " + id + " n'a pas été trouvé.");

@@ -42,7 +42,7 @@ public class AlbumController {
             value = "/{id}"
     )
     @ResponseStatus(value = HttpStatus.NO_CONTENT) // 204
-    public RedirectView deleteAlbum(
+    public void deleteAlbum(
             @PathVariable(value = "id")Long id
     ){
         //404
